@@ -1,57 +1,46 @@
 package com.rajni.assignment.week1;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Scanner;
+import java.util.Set;
 
 public class StraightFlush {
     public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
-        String[] strArray = new String[5];
-       // char[] suits = new char[5];
+        Set<Character> suits = new HashSet<>();
+        int[] ranks = new int[5];
         for (int i = 0 ; i < 5; i++) {
             String str = scanner.next();
-            strArray[i] = str;
-         //   suits[i] = str.charAt(1);
+            ranks[i] = rank(str.charAt(0));
+            suits.add(str.charAt(1));
         }
 
-        boolean sameUnit = true;
-        boolean aceFlush = false;
-
-        boolean isAce = false;
-        int countOfLetters = 0;
-        int countOfDigits = 0;
-        for (int i = 0 ;i < strArray.length; i++) {
-            String str = strArray[i];
-            char firstChar = str.charAt(0);
-            char secondChar = str.charAt(1);
-            if(Character.isLetter(firstChar)) {
-                countOfLetters++;
-                if(firstChar == 'A') {
-                    isAce = true;
-                }
-            } else if(Character.isDigit(firstChar)) {
-                countOfDigits++;
-            }
-            // check for the same unit.
-            if(i < strArray.length - 1 && secondChar != strArray[i+1].charAt(1)) {
-                sameUnit = false;
-            }
-        }
-
-        if(sameUnit) {
-            if(countOfDigits > 0 && countOfLetters > 0 ) {
-                if(isAce && countOfLetters == 1)
-                    aceFlush = true;
-            } else if(countOfDigits > 0) {
-                aceFlush = true;
-            } else if(countOfLetters > 0) {
-                aceFlush = true;
-            }
-        }
-
-        if(aceFlush) {
-            System.out.println("YES");
-        } else {
+        if(suits.size() > 1) {
             System.out.println("NO");
+        } else {
+            Arrays.sort(ranks);
+
+            for (int i = 0; i < 4; ++i) {
+                if (ranks[i] + 1 != ranks[i + 1]) {
+                    if (i < 3 || ranks[0] != 2 || ranks[4] != 14) {
+                        System.out.println("NO");
+                        return;
+                    }
+                }
+            }
+            System.out.println("YES");
         }
+    }
+
+    public static int rank(char ch) {
+        switch (ch) {
+            case 'T' : return 10;
+            case 'J' : return 11;
+            case 'Q' : return 12;
+            case 'K' : return 13;
+            case 'A' : return 14;
+        }
+        return ch - '0';
     }
 }
